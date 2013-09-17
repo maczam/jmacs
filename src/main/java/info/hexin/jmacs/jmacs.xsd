@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.hexin.info/schema/beans" xmlns="http://www.hexin.info/schema/beans"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<!-- bean配置xml描述 -->
+	<xsd:attributeGroup name="beanAttributes">
+		<xsd:attribute name="id" type="xsd:ID" use="optional" />
+		<xsd:attribute name="class" type="xsd:string" use="required" />
+	</xsd:attributeGroup>
+
+	<!-- bean配置xml的定义 -->
+	<xsd:complexType name="beanInfo">
+		<xsd:sequence>
+			<xsd:element name="property" type="beanProperty"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attributeGroup ref="beanAttributes" />
+	</xsd:complexType>
+
+	<!-- bean配置属性配置 -->
+	<xsd:complexType name="beanProperty">
+		<xsd:sequence />
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="value" type="xsd:string" use="optional" />
+		<xsd:attribute name="ref" type="xsd:string" use="optional" />
+	</xsd:complexType>
+
+	<xsd:element name="beans">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="bean" type="beanInfo" minOccurs="0"
+					maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
