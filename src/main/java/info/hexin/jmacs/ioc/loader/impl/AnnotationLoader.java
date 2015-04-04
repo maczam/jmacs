@@ -14,6 +14,7 @@ import info.hexin.lang.Exceptions;
 import info.hexin.lang.string.Strings;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +22,8 @@ import java.util.Set;
 
 /**
  * 解析已经标记注解的类
- * 
+ *
  * @author hexin
- * 
  */
 public class AnnotationLoader extends AbstractLoader {
     static Log log = Logs.get();
@@ -34,7 +34,7 @@ public class AnnotationLoader extends AbstractLoader {
 
     /**
      * 找到所有注解的类, 并实现单例
-     * 
+     *
      * @param packages
      */
     private void loadPackages(String... packages) {
@@ -74,7 +74,7 @@ public class AnnotationLoader extends AbstractLoader {
 
     /**
      * 装载class
-     * 
+     *
      * @param packages
      * @return
      * @throws ClassNotFoundException
@@ -88,26 +88,40 @@ public class AnnotationLoader extends AbstractLoader {
             if (!file.exists()) {
                 throw Exceptions.make("packagePath >>> " + packagePath + " is not exists!!");
             }
-            String[] ss = file.list();
-            for (String fileName : ss) {
-                if (fileName.endsWith(".class")) {
-                    String clazzName = packagePath + "." + fileName.substring(0, fileName.indexOf("."));
-                    Class<?> clazz;
-                    try {
-                        clazz = Class.forName(clazzName);
-                        for (Class<? extends Annotation> annotationClass : supportAnnotation) {
-                            Annotation bean = clazz.getAnnotation(annotationClass);
-                            if (bean != null) {
-                                loadInterFace(clazz);
-                                classSet.add(clazz);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+            loadFileClass(classSet, packagePath, file);
+        }
+        return classSet;
+    }
+
+    private void loadFileClass(Set<Class<?>> classSet,final String packagePath, File file) {
+        for (File classFile : file.listFiles()) {
+            if (classFile.isDirectory()) {
+                //是目录 需要递归
+                String tmpPackagePath = packagePath + "." + classFile.getName();
+                loadFileClass(classSet, tmpPackagePath, classFile);
+            } else {
+                String fileName = classFile.getName();
+                if (!fileName.endsWith(".class")) {
+                    continue;
+                }
+                String clazzName = packagePath + "." + fileName.substring(0, fileName.indexOf("."));
+                try {
+                    if (log.isDebugEnabled()) {
+                        log.debug("load class >>{}", clazzName);
                     }
+                    Class<?> clazz = Class.forName(clazzName);
+                    for (Class<? extends Annotation> annotationClass : supportAnnotation) {
+                        Annotation bean = clazz.getAnnotation(annotationClass);
+                        if (bean != null) {
+                            loadInterFace(clazz);
+                            classSet.add(clazz);
+                        }
+                    }
+                } catch (Exception e) {
+                    throw Exceptions.make("load class is error>>" + clazzName, e);
                 }
             }
         }
-        return classSet;
     }
 }
