@@ -1,6 +1,7 @@
 package info.hexin.jmacs.ioc.context.impl;
 
 import info.hexin.jmacs.aop.config.AopConfig;
+import info.hexin.jmacs.dao.Dao;
 import info.hexin.jmacs.ioc.InitBean;
 import info.hexin.jmacs.ioc.IocBean;
 import info.hexin.jmacs.ioc.annotation.Bean;
@@ -15,6 +16,7 @@ import info.hexin.lang.Exceptions;
 import info.hexin.lang.reflect.Reflects;
 import info.hexin.lang.string.Strings;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,17 @@ public class SimpleIoc implements Ioc {
 
         // initbean
         initbean();
+
+        //DataSource ioc 和 dao没有解耦
+        DataSource dataSource = getBean(DataSource.class);
+        if(dataSource != null){
+            Dao dao = new Dao(dataSource);
+            IocBean iocBean = new IocBean();
+            iocBean.setInstance(dao);
+            iocBean.setClassName(Dao.class.getName());
+            iocBean.setClazz(Dao.class);
+            beans.put("dao",iocBean);
+        }
 
         // 下面一定需要，保存一份ioc指引。如果写道别的地方，那么每次newioc的时候都需要修改
         AopConfig.setIoc(this);
