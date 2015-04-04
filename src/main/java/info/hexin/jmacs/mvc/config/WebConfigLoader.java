@@ -42,9 +42,8 @@ import javax.servlet.FilterRegistration;
 
 /**
  * 解析web.xml配置文件，生成ioc
- * 
+ *
  * @author hexin
- * 
  */
 public class WebConfigLoader {
     private static final Log logger = Logs.get();
@@ -59,7 +58,7 @@ public class WebConfigLoader {
 
     /**
      * 构造webioc容器，如果
-     * 
+     *
      * @param filterConfig
      */
     public WebContext createWebContext(FilterConfig filterConfig) {
@@ -74,9 +73,8 @@ public class WebConfigLoader {
     }
 
     /**
-     * 
      * 创建urlmapping
-     * 
+     *
      * @param ioc
      * @param webConfig
      * @return
@@ -171,7 +169,7 @@ public class WebConfigLoader {
 
     /**
      * 获取上传属性
-     * 
+     *
      * @param method
      * @return
      */
@@ -195,7 +193,7 @@ public class WebConfigLoader {
 
     /**
      * 获取方法的参数
-     * 
+     *
      * @param method
      * @return
      */
@@ -243,7 +241,7 @@ public class WebConfigLoader {
 
     /**
      * 根据配置的xml或者package来生成ioc容器
-     * 
+     *
      * @param webConfig
      * @return
      */
@@ -267,13 +265,15 @@ public class WebConfigLoader {
             } else {
                 parent.load(ioc);
             }
+        } else {
+            throw new RuntimeException("没有");
         }
         return parent;
     }
 
     /**
      * 创建部分配置文件WebConfig
-     * 
+     *
      * @param filterConfig
      * @return
      */
@@ -290,9 +290,23 @@ public class WebConfigLoader {
         // ioc
         // 使用xml配置加载容器
         String xmls = filterConfig.getInitParameter(XMLS);
-        webConfig.setXmls(xmls);
+        if (Strings.isNotBlank(xmls)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("find xml ioc config >>{}", xmls);
+            }
+            webConfig.setXmls(xmls);
+        }
         String packages = filterConfig.getInitParameter(PACKAGES);
-        webConfig.setPackages(packages);
+        if (Strings.isNotBlank(packages)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("find packages ioc config >>{}", packages);
+            }
+            webConfig.setPackages(packages);
+        }
+
+        if (Strings.isBlank(xmls) && Strings.isBlank(packages)) {
+            throw new RuntimeException("you kill me，i do not known create ioc!!!");
+        }
 
         // exclusions
         Pattern exclusionPattern = null;
