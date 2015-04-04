@@ -15,23 +15,23 @@ public class IocAnnotationLoaderTest {
 
 
     // 包不存在
-//    @Test(expected = RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public void testInjectInterface() {
         Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.jmacs.test.ioc.bean"));
         IA ia = context.getBean(IA.class);
         Assert.assertEquals("AImpl", ia.say());
     }
     
-//    @Test
+    @Test
     public void testInjectInterface1() {
-        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.jmacs.ioc.bean"));
+        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.ioc.bean"));
         IA ia = context.getBean(IA.class);
         Assert.assertEquals("AImpl", ia.say());
     }
 
-//    @Test
+    @Test
     public void testScope() {
-        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.jmacs.ioc.bean"));
+        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.ioc.bean"));
         A a1 = context.getBean(A.class);
         A a2 = context.getBean(A.class);
 
@@ -42,7 +42,7 @@ public class IocAnnotationLoaderTest {
 
     @Test
     public void testDefaultValue() {
-        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.jmacs.ioc.bean"));
+        Ioc context = new SimpleIoc(new AnnotationLoader("info.hexin.jmacs.ioc.bean"));
         C c = context.getBean(C.class);
         Assert.assertEquals("abc", c.getName());
         Assert.assertEquals(1, c.getAge());

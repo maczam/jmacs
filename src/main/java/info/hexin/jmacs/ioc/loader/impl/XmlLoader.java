@@ -110,7 +110,14 @@ public class XmlLoader extends AbstractLoader {
                     }
                     // bean
                     else {
-                        id = Strings.isNotBlank(id) ? id : Strings.lowerFirst(className);
+                        String simpleName =null;
+                        if(className.indexOf(".") >= 0){
+                            simpleName = className.substring(className.lastIndexOf(".")+1);
+                        } else {
+                            simpleName = className;
+                        }
+
+                        id = Strings.isNotBlank(id) ? id : Strings.lowerFirst(simpleName);
                         Class<?> klass = Class.forName(className);
 
                         IocBean iocBean = new IocBean();

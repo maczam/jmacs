@@ -11,7 +11,7 @@ public class IocXmlLoaderTest {
 
     @Test
     public void testInjectInterface() {
-        Ioc context = new SimpleIoc(new XmlLoader("info.hexin.jmacs.jmacs.ioc.loader.app1.xml"));
+        Ioc context = new SimpleIoc(new XmlLoader("app1.xml"));
         C c = context.getBean(C.class);
         System.out.println(c.getName());
     }
