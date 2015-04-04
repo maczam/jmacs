@@ -3,3 +3,11 @@
 /bin
 .classpath
 .project
+
+
+*.ipr
+*.iml
+*.iws
+.idea/
+.idea_modules/
+~$*
