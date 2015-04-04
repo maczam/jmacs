@@ -5,20 +5,20 @@ import info.hexin.lang.Exceptions;
 import info.hexin.lang.string.Strings;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * ioc容器工具方法
- * 
+ *
  * @author hexin
- * 
  */
 public class Iocs {
 
     /**
      * 获取class需要注入的属性，不获取父类
-     * 
+     *
      * @param clazz
      * @return
      */

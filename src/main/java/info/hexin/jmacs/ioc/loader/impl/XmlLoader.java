@@ -42,7 +42,7 @@ public class XmlLoader extends AbstractLoader {
     }
 
     /**
-     * 
+     *
      */
     private void injectDefaultValue() {
         for (Map.Entry<String, IocBean> entry : beanMap.entrySet()) {
@@ -110,9 +110,9 @@ public class XmlLoader extends AbstractLoader {
                     }
                     // bean
                     else {
-                        String simpleName =null;
-                        if(className.indexOf(".") >= 0){
-                            simpleName = className.substring(className.lastIndexOf(".")+1);
+                        String simpleName = null;
+                        if (className.indexOf(".") >= 0) {
+                            simpleName = className.substring(className.lastIndexOf(".") + 1);
                         } else {
                             simpleName = className;
                         }
@@ -145,9 +145,7 @@ public class XmlLoader extends AbstractLoader {
                             if (Strings.isNotBlank(value)) {
                                 property.setValue(value);
                                 Field field = Iocs.findClassFiled(klass, name);
-                                if (field == null) {
-                                    log.warn(String.format("请检查 %s 类或者父类中是否存在属性 %s", klass, name));
-                                } else {
+                                if (field != null) {
                                     property.setField(field);
                                 }
                             }

@@ -21,12 +21,11 @@ import java.util.Map;
 
 /**
  * 统一抽象context加载
- * 
+ *
  * @author hexin
- * 
  */
 public class SimpleIoc implements Ioc {
-    
+
     private static Log log = Logs.get();
 
     private Map<String, IocBean> beans;
@@ -49,15 +48,15 @@ public class SimpleIoc implements Ioc {
         for (Map.Entry<String, IocBean> entry : beans.entrySet()) {
             IocBean iocBean = entry.getValue();
             if (iocBean.getScope() == Scope.singleton) {
-                
-                log.debug("init bean >>>"+iocBean.getClazz());
-                
+
+                log.debug("init bean >>>" + iocBean.getClazz());
+
                 Object instancebean = iocBean.newInstance();
                 iocBean.setInstance(instancebean);
                 Reflects.injectField(instancebean, iocBean, this);
                 try {
-                    if(InitBean.class.isAssignableFrom(iocBean.getClazz())){
-                        ((InitBean)instancebean).afterPropertiesSet();
+                    if (InitBean.class.isAssignableFrom(iocBean.getClazz())) {
+                        ((InitBean) instancebean).afterPropertiesSet();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -68,7 +67,7 @@ public class SimpleIoc implements Ioc {
 
     /**
      * 先尝试获取代理类，在按照真实名字访问
-     * 
+     *
      * @param clazz
      * @param beanName
      * @return
@@ -107,11 +106,11 @@ public class SimpleIoc implements Ioc {
                     instancebean = (T) iocBean.newInstance();
                     Reflects.injectField(instancebean, iocBean, this);
                     try {
-                        if(InitBean.class.isAssignableFrom(iocBean.getClazz())){
-                            ((InitBean)instancebean).afterPropertiesSet();
+                        if (InitBean.class.isAssignableFrom(iocBean.getClazz())) {
+                            ((InitBean) instancebean).afterPropertiesSet();
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        throw Exceptions.make("beanName >>> " + beanName + " 实例获取异常!!", e);
                     }
                 }
                 return instancebean;
@@ -139,7 +138,7 @@ public class SimpleIoc implements Ioc {
         } else {
             beanId = Strings.lowerFirst(clazz.getSimpleName());
         }
-        return (T) this.getBean(clazz, beanId);
+        return this.getBean(clazz, beanId);
     }
 
     @Override
@@ -169,7 +168,7 @@ public class SimpleIoc implements Ioc {
 
     /**
      * 没有找到，抛出异常
-     * 
+     *
      * @param beanName
      */
     private void ensureContains(String beanName) {
