@@ -121,8 +121,8 @@ public class Dao extends BaseDao {
                 Statement statement = conn.createStatement();
                 try {
                     return statementCallback.doInStatement(statement);
-                } catch (Exception e) {
-                    throw Exceptions.make(e);
+                } catch (SQLException e) {
+                    throw e;
                 } finally {
                     if (statement != null) {
                         statement.close();
@@ -139,8 +139,8 @@ public class Dao extends BaseDao {
                 PreparedStatement state = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 try {
                     return preparedStatementCallBack.doInPreparedStatement(state);
-                } catch (Exception e) {
-                    throw Exceptions.make(e);
+                } catch (SQLException e) {
+                    throw e;
                 } finally {
                     if (state != null) {
                         state.close();
@@ -157,8 +157,8 @@ public class Dao extends BaseDao {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 try {
                     return statement.executeUpdate();
-                } catch (Exception e) {
-                    throw Exceptions.make(e);
+                } catch (SQLException e) {
+                    throw e;
                 } finally {
                     if (statement != null) {
                         statement.close();

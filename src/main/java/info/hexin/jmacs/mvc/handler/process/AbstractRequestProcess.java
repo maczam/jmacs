@@ -32,7 +32,7 @@ public abstract class AbstractRequestProcess {
     /**
      * 处理request主要入口，一般不需要覆盖，覆盖的话就会导致混乱
      */
-    public ViewModel process(RequestContext requestContext) throws IOException {
+    public ViewModel process(RequestContext requestContext)  {
 
         HttpServletRequest request = requestContext.getRequest();
         HttpServletResponse response = requestContext.getResponse();
@@ -57,7 +57,7 @@ public abstract class AbstractRequestProcess {
      *            参数值对象，method反射调用传进去的参数列表
      */
     public abstract List<Object> doMethodParam(HttpServletRequest request, HttpServletResponse response,
-            MethodInfo methodInfo, Map<String, String> urlParamMap) throws IOException;
+            MethodInfo methodInfo, Map<String, String> urlParamMap);
 
     /**
      * 

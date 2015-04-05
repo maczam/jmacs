@@ -25,9 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 处理请求
- * 
+ *
  * @author hexin
- * 
  */
 public class MappedHandler {
     static Log logger = Logs.get();
@@ -94,22 +93,16 @@ public class MappedHandler {
     }
 
     /**
-     * 
      * @param requestContext
      * @return
      */
     private ViewModel actionHandler(RequestContext requestContext) {
         String contentType = requestContext.getRequest().getContentType();
-        try {
-            AbstractRequestProcess requestProcess = getRequestProcess(contentType);
-            return requestProcess.process(requestContext);
-        } catch (Exception e) {
-            throw Exceptions.make(e);
-        }
+        AbstractRequestProcess requestProcess = getRequestProcess(contentType);
+        return requestProcess.process(requestContext);
     }
 
     /**
-     * 
      * @param contentType
      * @return
      */

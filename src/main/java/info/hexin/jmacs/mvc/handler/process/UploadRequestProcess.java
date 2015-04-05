@@ -38,7 +38,7 @@ public class UploadRequestProcess extends AbstractRequestProcess {
 
     @Override
     public List<Object> doMethodParam(HttpServletRequest request, HttpServletResponse response, MethodInfo methodInfo,
-            Map<String, String> urlParamMap) throws IOException {
+            Map<String, String> urlParamMap) {
         List<Arg> args = methodInfo.getArgs();
         UploadParam uploadParam = methodInfo.getUploadParam();
 
