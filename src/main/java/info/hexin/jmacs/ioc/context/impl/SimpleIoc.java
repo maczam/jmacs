@@ -42,17 +42,6 @@ public class SimpleIoc implements Ioc {
         // initbean
         initbean();
 
-        //DataSource ioc 和 dao没有解耦
-        DataSource dataSource = getBean(DataSource.class);
-        if(dataSource != null){
-            Dao dao = new Dao(dataSource);
-            IocBean iocBean = new IocBean();
-            iocBean.setInstance(dao);
-            iocBean.setClassName(Dao.class.getName());
-            iocBean.setClazz(Dao.class);
-            beans.put("dao",iocBean);
-        }
-
         // 下面一定需要，保存一份ioc指引。如果写道别的地方，那么每次newioc的时候都需要修改
         AopConfig.setIoc(this);
     }
