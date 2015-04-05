@@ -14,10 +14,9 @@ import java.util.Map;
 
 /**
  * 系统默认自动的和ResultSet匹配
- * 
- * @author hexin
- * 
+ *
  * @param <T>
+ * @author hexin
  */
 public class AutoRowMapper<T> implements RowMapper<T> {
 
@@ -29,7 +28,6 @@ public class AutoRowMapper<T> implements RowMapper<T> {
 
     @Override
     public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-        System.out.println(rs.getClass());
         ResultSetMetaData metaData = rs.getMetaData();
         Map<String, Field> fieldMap = DaoRef.getCloumnFiled(klazz);
         try {
@@ -42,32 +40,38 @@ public class AutoRowMapper<T> implements RowMapper<T> {
             int count = metaData.getColumnCount();
             for (int i = 1; i <= count; i++) {
                 String columnName = metaData.getColumnLabel(i);
-                if (fieldMap.containsKey(columnName)) {
-                    Field field = fieldMap.get(columnName);
-                    Class<?> fieldType = field.getType();
-                    Object value = null;
-                    if (fieldType == String.class) {
-                        value = rs.getString(columnName);
-                    } else if (fieldType == Date.class) {
-                        value = rs.getDate(columnName);
-                    } else if (fieldType == int.class || fieldType == Integer.class) {
-                        value = rs.getInt(columnName);
-                    } else if (fieldType == long.class || fieldType == Long.class) {
-                        value = rs.getLong(columnName);
-                    } else if (fieldType == float.class || fieldType == Float.class) {
-                        value = rs.getFloat(columnName);
-                    } else if (fieldType == double.class || fieldType == Double.class) {
-                        value = rs.getDouble(columnName);
-                    } else if (fieldType == short.class || fieldType == Short.class) {
-                        value = rs.getShort(columnName);
-                    } else if (fieldType == byte.class || fieldType == Byte.class) {
-                        value = rs.getByte(columnName);
-                    } else if (fieldType == byte[].class || fieldType == Byte[].class) {
-                        value = rs.getBytes(columnName);
+                Field field = fieldMap.get(columnName);
+                if (field == null) {
+                    field = fieldMap.get(columnName.toLowerCase());
+                    if (field == null) {
+                        field = fieldMap.get(columnName.toUpperCase());
+                        if (field == null) {
+                            continue;
+                        }
                     }
-                    System.out.println(columnName + "  " + fieldType + "   " + value);
-                    Reflects.setFieldValue(t, field, value);
                 }
+                Class<?> fieldType = field.getType();
+                Object value = null;
+                if (fieldType == String.class) {
+                    value = rs.getString(columnName);
+                } else if (fieldType == Date.class) {
+                    value = rs.getDate(columnName);
+                } else if (fieldType == int.class || fieldType == Integer.class) {
+                    value = rs.getInt(columnName);
+                } else if (fieldType == long.class || fieldType == Long.class) {
+                    value = rs.getLong(columnName);
+                } else if (fieldType == float.class || fieldType == Float.class) {
+                    value = rs.getFloat(columnName);
+                } else if (fieldType == double.class || fieldType == Double.class) {
+                    value = rs.getDouble(columnName);
+                } else if (fieldType == short.class || fieldType == Short.class) {
+                    value = rs.getShort(columnName);
+                } else if (fieldType == byte.class || fieldType == Byte.class) {
+                    value = rs.getByte(columnName);
+                } else if (fieldType == byte[].class || fieldType == Byte[].class) {
+                    value = rs.getBytes(columnName);
+                }
+                Reflects.setFieldValue(t, field, value);
             }
             return t;
         } catch (Exception e) {

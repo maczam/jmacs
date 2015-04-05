@@ -13,14 +13,13 @@ import info.hexin.jmacs.log.Log;
 import info.hexin.jmacs.log.Logs;
 import info.hexin.lang.Exceptions;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 /**
  * 框架的dao类
